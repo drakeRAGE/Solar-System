@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Solar System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            overflow: hidden;
+            color: white;
+        }
+
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .ui-panel {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .controls {
+            top: 20px;
+            left: 20px;
+            width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .controls h3 {
+            margin-bottom: 15px;
+            color: #FFD700;
+            text-align: center;
+        }
+
+        .planet-control {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .planet-control label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #FFF;
+        }
+
+        .planet-control input[type="range"] {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .speed-value {
+            font-size: 12px;
+            color: #AAA;
+        }
+
+        .main-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #555;
+        }
+
+        .btn.pause {
+            background: #ff4444;
+        }
+
+        #info-panel {
+            display: none;
+            bottom: 20px;
+            right: 20px;
+            width: 250px;
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        #planet-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+
+        #planet-info {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #AAA;
+        }
+
+        .instructions h4 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            margin-bottom: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <div class="ui-panel controls">
+        <h3>🌌 Solar System Controls</h3>
+
+        <div class="planet-control">
+            <label for="mercury">Mercury</label>
+            <input type="range" id="mercury" min="0" max="5" step="0.1" value="1">
+            <div class="speed-value">Speed: 1.0x</div>
+        </div>
+
+        <div class="planet-control">
+            <label for="venus">Venus</label>
+            <input type="range" id="venus" min="0" max="5" step="0.1" value="1">
+            <div class="speed-value">Speed: 1.0x</div>
+        </div>
+
+        <div class="planet-control">
+            <label for="earth">Earth</label>
+            <input type="range" id="earth" min="0" max="5" step="0.1" value="1">
+            <div class="speed-value">Speed: 1.0x</div>
+        </div>
+
+        <div class="planet-control">
+            <label for="mars">Mars</label>
+            <input type="range" id="mars" min="0" max="5" step="0.1" value="1">
+            <div class="speed-value">Speed: 1.0x</div>
+        </div>
+
+        <div class="planet-control">
+            <label for="jupiter">Jupiter</label>
+            <input type="range" id="jupiter" min="0" max="5" step="0.1" value="1">
+            <div class="speed-value">Speed: 1.0x</div>
+        </div>
+
+        <div class="planet-control">
+            <label for="saturn">Saturn</label>
+            <input type="range" id="saturn" min="0" max="5" step="0.1" value="1">
+            <div class="speed-value">Speed: 1.0x</div>
+        </div>
+
+        <div class="planet-control">
+            <label for="uranus">Uranus</label>
+            <input type="range" id="uranus" min="0" max="5" step="0.1" value="1">
+            <div class="speed-value">Speed: 1.0x</div>
+        </div>
+
+        <div class="planet-control">
+            <label for="neptune">Neptune</label>
+            <input type="range" id="neptune" min="0" max="5" step="0.1" value="1">
+            <div class="speed-value">Speed: 1.0x</div>
+        </div>
+
+        <div class="main-controls">
+            <button id="pauseBtn" class="btn">Pause</button>
+            <button id="darkModeBtn" class="btn">Light Mode</button>
+            <button id="resetBtn" class="btn">Reset</button>
+        </div>
+    </div>
+
+    <div class="ui-panel" id="info-panel">
+        <div id="planet-name"></div>
+        <div id="planet-info"></div>
+    </div>
+
+    <div class="instructions">
+        <h4>🎮 Controls</h4>
+        <p>• Left Mouse: Rotate view</p>
+        <p>• Right Mouse: Pan view</p>
+        <p>• Scroll: Zoom in/out</p>
+        <p>• Click planets: View info</p>
+        <p>• Sliders: Control speeds</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module" src="/index.js"></script>
+</body>
+
+</html>
