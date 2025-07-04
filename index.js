@@ -270,7 +270,7 @@ class SolarSystem {
     }
 
     createSun() {
-        const sunGeometry = new THREE.SphereGeometry(2, 32, 32);
+        const sunGeometry = new THREE.SphereGeometry(4, 64, 64);
         const sunTexture = this.textureLoader.load(
             "./image/sun.jpg",
             undefined,
@@ -325,7 +325,7 @@ class SolarSystem {
             planet.position.x = data.distance;
             planet.position.y = 0;
             planet.position.z = 0;
-            planet.castShadow = true;
+            planet.castShadow = false;
             planet.receiveShadow = true;
 
             // Add planet data including orbital inclination
