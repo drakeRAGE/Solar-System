@@ -186,8 +186,8 @@ class SolarSystem {
         this.scene = new THREE.Scene();
 
         // Create camera
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.set(0, 30, 60);
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera.position.set(0, 3, 30);
 
         // Create renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
